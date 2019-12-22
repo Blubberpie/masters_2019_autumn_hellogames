@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Hello Games</string>
+    <string name="game_top_left_description">Image 1</string>
+    <string name="game_top_right_description">Image 2</string>
+    <string name="game_bottom_left_description">Image 3</string>
+    <string name="game_bottom_right_description">Image 4</string>
+</resources>
