@@ -15,8 +15,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.converter.gson.GsonConverterFactory
 
+// Implement OnClickListener to avoid repetitive code
 class MainActivity : AppCompatActivity(), View.OnClickListener{
 
+    /* Globally setup retrofit */
     private val gameBaseUrl = "https://androidlessonsapi.herokuapp.com/api/"
     private val jsonConverter = GsonConverterFactory.create(GsonBuilder().create())
     private val retrofit = Retrofit.Builder()
@@ -24,8 +26,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         .addConverterFactory(jsonConverter)
         .build()
     private val service = retrofit.create(WebServiceInterface::class.java)
-    private var fourGamesMap = LinkedHashMap<ImageView, GameObject>()
 
+    // Keep track of which imageView holds which Game
+    private var fourGamesMap = HashMap<ImageView, GameObject>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         game_bottom_left.setOnClickListener(this)
         game_bottom_right.setOnClickListener(this)
 
+        /* Callback for retrieving list of games using the API */
         val retrieveGamesCallback = object : Callback<List<GameObject>> {
             override fun onFailure(call: Call<List<GameObject>>, t: Throwable) {
                 Toast.makeText(
@@ -50,12 +54,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 response: Response<List<GameObject>>
             ) {
                 if (response.code() == 200) {
+                    // Randomize the list of games, from which the first 4 will be selected later
                     val gameList = response.body()!!.shuffled()
-                    val gameImageViews =
-                        arrayOf(game_top_left, game_top_right, game_bottom_left, game_bottom_right)
+                    val gameImageViews = arrayOf(game_top_left, game_top_right, game_bottom_left, game_bottom_right)
+
+                    /* Assign each Image View a game and place in the hash map for later access*/
                     for ((i, gameImageView) in gameImageViews.withIndex()) {
                         val gameObj = gameList[i]
                         fourGamesMap[gameImageViews[i]] = gameObj
+
+                        // Load the current Image View with the relevant picture
                         Glide.with(this@MainActivity).load(gameObj.picture).into(gameImageView)
                     }
                 } else {
@@ -69,6 +77,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     override fun onClick(v: View?) {
         val gameDetailsIntent = Intent(this@MainActivity, GameInfo::class.java)
+
+        // Load new activity and pass the currently selected game's ID
         gameDetailsIntent.putExtra("game_id", fourGamesMap[v]!!.id)
         startActivity(gameDetailsIntent)
     }
