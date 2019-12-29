@@ -1,5 +1,7 @@
 package com.blubber.hellogames
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
@@ -43,9 +45,19 @@ class GameInfo : AppCompatActivity() {
                 if(response.code() == 200) {
                     val gameDetailsObj = response.body()
                     Glide.with(this@GameInfo).load(gameDetailsObj!!.picture).into(game_image)
+
                     val gameData = getString(R.string.game_data, gameDetailsObj.name, gameDetailsObj.type, gameDetailsObj.players, gameDetailsObj.year)
                     game_data.setText(HtmlCompat.fromHtml(gameData, HtmlCompat.FROM_HTML_MODE_LEGACY))
                     game_description.setText(gameDetailsObj.description_en)
+
+                    know_more_button.setOnClickListener{
+                        val knowMoreUrl = gameDetailsObj.url
+                        val externalUrlIntent = Intent(Intent.ACTION_VIEW)
+
+                        externalUrlIntent.data = Uri.parse(knowMoreUrl)
+                        startActivity(externalUrlIntent)
+                    }
+
                 } else {
                     Toast.makeText(this@GameInfo, "Error", Toast.LENGTH_SHORT).show()
                 }
