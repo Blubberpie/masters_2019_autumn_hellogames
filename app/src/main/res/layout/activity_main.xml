@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/game_top_left"
         android:contentDescription="@string/game_top_left_description"
         android:layout_width="150dp"

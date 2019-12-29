@@ -1,8 +1,8 @@
 package com.blubber.hellogames
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import retrofit2.Retrofit
@@ -15,9 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity()
-//    , View.OnClickListener
-{
+class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     private val gameBaseUrl = "https://androidlessonsapi.herokuapp.com/api/"
     private val jsonConverter = GsonConverterFactory.create(GsonBuilder().create())
@@ -32,6 +30,11 @@ class MainActivity : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        game_top_left.setOnClickListener(this)
+        game_top_right.setOnClickListener(this)
+        game_bottom_left.setOnClickListener(this)
+        game_bottom_right.setOnClickListener(this)
 
         val retrieveGamesCallback = object : Callback<List<GameObject>> {
             override fun onFailure(call: Call<List<GameObject>>, t: Throwable) {
@@ -62,39 +65,11 @@ class MainActivity : AppCompatActivity()
         }
 
         service.getAllGames().enqueue(retrieveGamesCallback)
+    }
 
-        val retrieveGameDetailsCallback = object : Callback<GameDetailsObject> {
-            override fun onFailure(call: Call<GameDetailsObject>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Failed to get game details!", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(
-                call: Call<GameDetailsObject>,
-                response: Response<GameDetailsObject>
-            ) {
-                if(response.code() == 200) {
-                    val gameDetailsObj = response.body()
-                    Toast.makeText(this@MainActivity, "Yay, ${gameDetailsObj!!.name}", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-        game_top_left.setOnClickListener {
-            service.getDetailsByGameId(fourGamesMap[it]!!.id).enqueue(retrieveGameDetailsCallback)
-        }
-
-        game_top_right.setOnClickListener {
-            service.getDetailsByGameId(fourGamesMap[it]!!.id).enqueue(retrieveGameDetailsCallback)
-        }
-
-        game_bottom_left.setOnClickListener {
-            service.getDetailsByGameId(fourGamesMap[it]!!.id).enqueue(retrieveGameDetailsCallback)
-        }
-
-        game_bottom_right.setOnClickListener {
-            service.getDetailsByGameId(fourGamesMap[it]!!.id).enqueue(retrieveGameDetailsCallback)
-        }
+    override fun onClick(v: View?) {
+        val gameDetailsIntent = Intent(this@MainActivity, GameInfo::class.java)
+        gameDetailsIntent.putExtra("game_id", fourGamesMap[v]!!.id)
+        startActivity(gameDetailsIntent)
     }
 }
