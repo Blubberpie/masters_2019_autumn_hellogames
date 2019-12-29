@@ -6,11 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/game_top_left"
         android:contentDescription="@string/game_top_left_description"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         tools:srcCompat="@tools:sample/avatars" />
@@ -20,6 +22,8 @@
         android:contentDescription="@string/game_top_right_description"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         tools:srcCompat="@tools:sample/avatars" />
@@ -29,6 +33,8 @@
         android:contentDescription="@string/game_bottom_left_description"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
         tools:srcCompat="@tools:sample/avatars" />
@@ -38,6 +44,8 @@
         android:contentDescription="@string/game_bottom_right_description"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
         tools:srcCompat="@tools:sample/avatars" />
